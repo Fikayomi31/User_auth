@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from enum import Enum
 
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import Enum, DateTime, Integer, String, Eunm as SQLAlchemyEnum
+from sqlalchemy import DateTime, Integer, String, Enum as SQLAlchemyEnum
 
 from app.database import Base
 
