@@ -66,3 +66,33 @@ async def register(
             detail="Username or email already exists.",
         )
     return new_user
+
+
+@router.post("/login")
+async def login(
+    user_data: UserLogin,
+    db: AsyncSession = Depends(get_db)
+):
+    user = await db.scalar(
+        select(User).where(
+            User.email == str(user_data.email).lower()
+        )
+    )
+
+    # Use the same reasonse for wrong email and password
+    if user is None or not verify_password(
+        user_data.password,
+        user.hashed_password,
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid email or password.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+        access_token = create_access_token(subject=str(user.id))
+
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+        }
