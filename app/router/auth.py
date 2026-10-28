@@ -46,3 +46,23 @@ async def register(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Password must be 12 characters or less.",
         )
+
+    new_user = User(
+        username=user_data.username,
+        email=str(user_data.email).lower(),
+        hashed_password=hash_password(user_data.password),
+        role=UserRole.USER,
+    )
+    db.add(new_user)
+
+    try:
+        await db.commit()
+        await db.refresh(new_user)
+
+    except IntegrityError:
+        await db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Username or email already exists.",
+        )
+    return new_user
