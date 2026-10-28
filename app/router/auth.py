@@ -7,8 +7,8 @@ from app.core.jwt import create_access_token
 from app.core.security import verify_password, hash_password
 from app.database import get_db
 from app.model.user import User, UserRole
-from app.schemas.user_schema import UserRegister, UserRespons, UserLogin
-e
+from app.schemas.user_schema import UserRegister, UserLogin, UserResponse
+
 
 
 router = APIRouter(
@@ -19,8 +19,8 @@ router = APIRouter(
 @router.post(
     "/register",
     response_model=UserResponse,
-    stqtus_code=status.HTTP_201_CREATED,
-):
+    status_code=status.HTTP_201_CREATED,
+)
 
 async def register(
         user_data: UserRegister,
@@ -90,9 +90,9 @@ async def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-        access_token = create_access_token(subject=str(user.id))
+    access_token = create_access_token(subject=str(user.id))
 
-        return {
-            "access_token": access_token,
-            "token_type": "bearer",
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
         }
