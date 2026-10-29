@@ -1,5 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 
+from app.core.permissions import require_role
+from app.model.user import UserRole
 from app.router.auth import router as auth_router
 
 app = FastAPI(
@@ -12,3 +14,24 @@ app.include_router(auth_router)
 @app.get("/")
 async def root():
     return {"message": "Welcome to the User Authentication API!"}
+
+
+@app.get("/api/user-area")
+async def user_area(
+    current_user=Depends(require_role(UserRole.USER)),
+):
+    return {
+        "message": "Welcome to the user area.",
+        "username": current_user.username,
+        "role": current_user.role.value
+    }
+
+@app.get("/api/admin-area")
+async def admin_area(
+    current_user=Depends(require_role.ADMIN)
+):
+    return {
+        "message": "Welcome to the admin area",
+        "username": current_user.username,
+        "role": current_user.role.value
+    }
