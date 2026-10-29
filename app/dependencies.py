@@ -4,17 +4,19 @@ from jwt.exceptions import InvalidTokenError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from collections.abc import AsyncGenerator
+
 from app.core.jwt import decode_access_token
-from app.database import AsyncSesionLocal
 from app.model.user import User
+from app.database import AsyncSessionLocal
 
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl= "/api/auth/login"
 )
 
+
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    async with AsyncSesionLocal() as session:
+    async with AsyncSessionLocal() as session:
         yield session
 
 async def get_current_user(
@@ -41,7 +43,7 @@ async def get_current_user(
         select(User).where(User.id == user_id)
     )
 
-    if user is None or not user.is_active:
+    if user is None:
         raise unauthorized
 
     return user

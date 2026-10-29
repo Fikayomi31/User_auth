@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.core.jwt import create_access_token
 from app.core.security import verify_password, hash_password
-from app.dependencies import get_db
+from app.dependencies import get_db, get_current_user
 from app.model.user import User, UserRole
 from app.schemas.user_schema import UserRegister, UserLogin, UserResponse
 
@@ -96,3 +96,10 @@ async def login(
         "access_token": access_token,
         "token_type": "bearer",
         }
+
+
+@router.get("/me", response_model=UserResponse)
+async def get_me(
+    current_user: User = Depends(get_current_user),
+):
+    return current_user
