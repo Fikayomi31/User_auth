@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.core.jwt import create_access_token
 from app.core.security import verify_password, hash_password
-from app.database import get_db
+from app.dependencies import get_db
 from app.model.user import User, UserRole
 from app.schemas.user_schema import UserRegister, UserLogin, UserResponse
 

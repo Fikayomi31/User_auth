@@ -1,9 +1,9 @@
-from fastapi import Depends, HTTPException,statusfrom
+from fastapi import Depends, HTTPException,status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from collections.abc import AsyncGenerator
 from app.core.jwt import decode_access_token
 from app.database import AsyncSesionLocal
 from app.model.user import User

@@ -28,7 +28,7 @@ async def user_area(
 
 @app.get("/api/admin-area")
 async def admin_area(
-    current_user=Depends(require_role.ADMIN)
+    current_user=Depends(require_role(UserRole.ADMIN))
 ):
     return {
         "message": "Welcome to the admin area",
