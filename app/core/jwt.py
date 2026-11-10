@@ -5,7 +5,7 @@ import jwt
 from app.core.config import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
     ALGORITHM,
-    SECRET_KEY,
+    JWT_SECRET_KEY,
 )
 
 def create_access_token(subject: str) -> str:
@@ -16,13 +16,12 @@ def create_access_token(subject: str) -> str:
         "exp": expired_at,
     }
 
-    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
-
+    return jwt.encode(payload, JWT_SECRET_KEY, algorithm=ALGORITHM)
 
 def decode_access_token(token: str) -> dict:
     payload = jwt.decode(
         token,
-        SECRET_KEY,
+        JWT_SECRET_KEY,
         algorithms=[ALGORITHM],
     )
 

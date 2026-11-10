@@ -79,7 +79,7 @@ async def login(
         )
     )
 
-    # Use the same reasonse for wrong email and password
+    
     if user is None or not verify_password(
         user_data.password,
         user.hashed_password,
